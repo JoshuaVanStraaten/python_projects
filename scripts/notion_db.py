@@ -135,7 +135,7 @@ def populate_notion_db():
     for page in pages:
         try:
             page_id = page["id"]
-            url = page["properties"]["URL"]["title"][0]["text"]["content"]
+            url = page["properties"]["URL"]["url"]
             curr_pages[url] = page_id
         except IndexError:
             pass
@@ -148,10 +148,10 @@ def populate_notion_db():
             published_date = datetime.strptime(info["created"], "%B %d, %Y %H:%M")
             published_date = published_date.replace(tzinfo=timezone('UTC')).isoformat()
             data = {
-                "Title": {"rich_text": [{"text": {"content": title}}]},
+                "Title": {"title": [{"text": {"content": title}}]},
                 "Published": {"date": {"start": published_date, "end": None}},
                 "Requestor": {"rich_text": [{"text": {"content": info["requestor"]}}]},
-                "URL": {"title": [{"text": {"content": url}}]}
+                "URL": {"url": url}
             }
             # Create the Notion page
             create_page(data)
